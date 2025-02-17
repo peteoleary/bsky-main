@@ -1,0 +1,24 @@
+{
+  "name": "main",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@atproto/api": "^0.14.1",
+    "@atproto/common": "^0.4.8",
+    "@atproto/dev-env": "^0.3.89",
+    "@atproto/repo": "^0.6.5"
+  }
+}
