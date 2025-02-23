@@ -16,6 +16,7 @@ TestNetworkNoAppView.create({
   }).then((network) => {
     serverHost = network.pds.url.replace('http://', '');
   agent = network.pds.getClient()
+  console.log('network.pds.server.ctx.actorStore.cfg.directory:', network.pds.server.ctx.actorStore.cfg.directory)
   const getRepo = async (did: string): Promise<repo.VerifiedRepo> => {
     const carRes = await agent.api.com.atproto.sync.getRepo({ did })
     const car = await repo.readCarWithRoot(carRes.data)
@@ -23,7 +24,7 @@ TestNetworkNoAppView.create({
     return repo.verifyRepo(car.blocks, car.root, did, signingKey.did())
   }
 
-  getRepo('did:atp:repo:0x1234').then((repo) => {
+  getRepo('did:plc:2yn32k65auyhjo2thnya3hlg').then((repo) => {
     console.log(repo)
   })
 })
