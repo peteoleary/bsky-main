@@ -6,6 +6,8 @@ import { HOUR } from '@atproto/common'
 let serverHost: string
 let agent: AtpAgent
 
+require('dotenv').config();
+
 TestNetworkNoAppView.create({
     dbPostgresSchema: 'repo_subscribe_repos',
     pds: {
@@ -13,9 +15,8 @@ TestNetworkNoAppView.create({
     },
   }).then((network) => {
     serverHost = network.pds.url.replace('http://', '');
-  let ctx = network.pds.ctx
   agent = network.pds.getClient()
-const getRepo = async (did: string): Promise<repo.VerifiedRepo> => {
+  const getRepo = async (did: string): Promise<repo.VerifiedRepo> => {
     const carRes = await agent.api.com.atproto.sync.getRepo({ did })
     const car = await repo.readCarWithRoot(carRes.data)
     const signingKey = await network.pds.ctx.actorStore.keypair(did)

@@ -18,6 +18,7 @@
     "@atproto/api": "^0.14.1",
     "@atproto/common": "^0.4.8",
     "@atproto/dev-env": "^0.3.89",
-    "@atproto/repo": "^0.6.5"
+    "@atproto/repo": "^0.6.5",
+    "dotenv": "^16.4.7"
   }
 }
