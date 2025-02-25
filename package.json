@@ -20,7 +20,11 @@
     "@atproto/common": "^0.4.8",
     "@atproto/crypto": "^0.4.4",
     "@atproto/dev-env": "^0.3.89",
+    "@atproto/pds": "^0.4.103",
     "@atproto/repo": "^0.6.5",
-    "dotenv": "^16.4.7"
+    "@opentelemetry/instrumentation": "^0.57.2",
+    "dd-trace": "^5.38.0",
+    "dotenv": "^16.4.7",
+    "opentelemetry-plugin-better-sqlite3": "^1.9.0"
   }
 }
