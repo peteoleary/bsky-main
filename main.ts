@@ -1,5 +1,5 @@
 /* eslint-env node */
-
+require('dotenv').config();
 'use strict'
 
 const {
