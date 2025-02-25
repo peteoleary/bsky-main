@@ -16,7 +16,9 @@
   },
   "dependencies": {
     "@atproto/api": "^0.14.1",
+    "@atproto/bsky": "^0.0.123",
     "@atproto/common": "^0.4.8",
+    "@atproto/crypto": "^0.4.4",
     "@atproto/dev-env": "^0.3.89",
     "@atproto/repo": "^0.6.5",
     "dotenv": "^16.4.7"

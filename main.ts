@@ -1,30 +1,32 @@
-import * as repo from '@atproto/repo'
-import { AtpAgent } from '@atproto/api'
-import { TestNetworkNoAppView } from '@atproto/dev-env'
-import { HOUR } from '@atproto/common'
+/* eslint-env node */
 
-let serverHost: string
-let agent: AtpAgent
+// Tracer code above must come before anything else
+const path = require('node:path')
+const assert = require('node:assert')
+const cluster = require('cluster')
+const { Secp256k1Keypair } = require('@atproto/crypto')
+const { ServerConfig, BskyAppView } = require('@atproto/bsky')
 
-require('dotenv').config();
-
-TestNetworkNoAppView.create({
-    dbPostgresSchema: 'repo_subscribe_repos',
-    pds: {
-      repoBackfillLimitMs: HOUR,
-    },
-  }).then((network) => {
-    serverHost = network.pds.url.replace('http://', '');
-  agent = network.pds.getClient()
-  console.log('network.pds.server.ctx.actorStore.cfg.directory:', network.pds.server.ctx.actorStore.cfg.directory)
-  const getRepo = async (did: string): Promise<repo.VerifiedRepo> => {
-    const carRes = await agent.api.com.atproto.sync.getRepo({ did })
-    const car = await repo.readCarWithRoot(carRes.data)
-    const signingKey = await network.pds.ctx.actorStore.keypair(did)
-    return repo.verifyRepo(car.blocks, car.root, did, signingKey.did())
+const main = async () => {
+  const env = getEnv()
+  const config = ServerConfig.readEnv()
+  assert(env.serviceSigningKey, 'must set BSKY_SERVICE_SIGNING_KEY')
+  const signingKey = await Secp256k1Keypair.import(env.serviceSigningKey)
+  const bsky = BskyAppView.create({ config, signingKey })
+  await bsky.start()
+  // Graceful shutdown (see also https://aws.amazon.com/blogs/containers/graceful-shutdowns-with-ecs/)
+  const shutdown = async () => {
+    await bsky.destroy()
   }
+  process.on('SIGTERM', shutdown)
+  process.on('disconnect', shutdown) // when clustering
+}
 
-  getRepo('did:plc:2yn32k65auyhjo2thnya3hlg').then((repo) => {
-    console.log(repo)
-  })
+const getEnv = () => ({
+  serviceSigningKey: process.env.BSKY_SERVICE_SIGNING_KEY || undefined,
+})
+
+main().catch((err) => {
+  console.error(err)
+  process.exit(1)
 })
